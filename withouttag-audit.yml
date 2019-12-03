@@ -1,0 +1,21 @@
+policies:
+  - name: withouttag-audit
+    resource: aws.ec2
+    comment: |
+      Retrieve list of all resources that match tag
+    filters:
+    - "State.Name": running   # Validate if the instance is running
+    - "tag:Team": absent # validate if the tag team is absent
+    - "tag:Name": present #Validate if the tag team is present
+# Validate if instance is ready to delete
+    - type: value
+      key: "tag:Check"
+      value: withouttag
+      op: equal
+    
+    actions:
+      - stop                          # uncomment this line to test stop action
+#     - terminate                      # uncomment this line to test terminate action
+#      - type: tag
+#        key: "Check"
+#        value: "withouttag"

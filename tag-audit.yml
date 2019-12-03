@@ -1,0 +1,16 @@
+policies:
+  - name: tag-audit
+    resource: aws.ec2
+    comment: |
+      Retrieve list of all resources that match tag
+    filters:
+    - "State.Name": running   # I Validate if the instance is running
+    - "tag:Team": present #i validate if the tag team is present
+    - type: value
+      key: "tag:Owner"
+      value: (He*) #check if there is anyone that starts with He
+      op: regex
+    actions:
+      - type: tag
+        key: "Check"
+        value: "compilewithcheck"

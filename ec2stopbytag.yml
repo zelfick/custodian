@@ -1,0 +1,15 @@
+policies:
+
+- name: ec2-stop-by-tag
+  resource: aws.ec2
+  comments: |
+    Stop EC2 instances inmediatly
+  filters:
+   - "tag:Environment": custodian
+ # List all instances that have tag Environment
+ #  - type: tag
+ #    key: Environment
+ #    value: present
+  actions:
+ # - stop 
+   - terminate

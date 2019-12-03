@@ -1,0 +1,13 @@
+policies:
+  - name: ebs-unattached
+    resource: aws.ebs
+    description: |
+      Cloud Custodian EBS Unattached Verification
+    filters:
+      - Attachments: []
+      - State: available      
+    actions:
+#      - delete
+      - type: tag
+        key: "Check"
+        value: "freetodelete"

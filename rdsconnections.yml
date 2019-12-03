@@ -1,0 +1,39 @@
+# Define a metric to mix validations
+#vars:
+#      metrics-filters: &metrics-filter
+#        type: metrics
+#        name: DatabaseConnections
+#        days: 14
+#        value: 0
+#        op: equal
+
+
+policies:
+  - name: rdsconnections
+    resource: aws.rds
+    comment: |
+      Retrieve list of all rds without connections in the last 7
+    filters:
+# Validate if the instance is running
+     - "DBInstanceStatus": available   
+# Validate if the rdsunused tag is present
+#     - "tag:rdsunused": present
+# Validate the creation time of the database if it is one day and compare with metric of database connection
+#     - type: value
+#       value_type: age
+#       key: InstanceCreateTime
+#       value: 1                          # Verify days of creation
+#       op: equal
+#      op: greater-than
+#    - <<: *metrics-filter
+     - type: metrics
+       name: DatabaseConnections        # Verify  none Database Connections for last 7 days
+       days: 7                          
+       value: 0
+       op: equal
+    actions:
+      - type: tag
+        key: "Check"
+        value: "rdsunused"                      # Mark the Instance with a tag that unused
+#      - stop                                    # stop the instance
+#      - terminate                               # Terminate the database

@@ -1,0 +1,27 @@
+- name: ec2-unused-stop-daily
+resource: ec2
+description: Find unused EC2 instances with 14 day average CPU utilization less than 1.5%, stop them, and mark for deletion in a week.
+filters:
+- type: metrics # Target resources that have had less than 1.5% CPU utilization for the past 2 weeks
+name: CPUUtilization
+days: 14
+value: 1.5
+op: less-than
+- type: instance-age # Only target resources that are at least 2 weeks old
+days: 14
+- type: value # Only target running instances
+key: "State.Name"
+value: "running"
+op: equal
+- "tag:aws:autoscaling:groupName": absent # Exclude ASG instances
+- type: value # Exclude the cheaper instance types
+key: InstanceType
+value: ["t2.nano", "t2.micro", "t2.small", "t3.nano", "t3.micro", "t3.small"]
+op: not-in
+actions:
+- type: stop # Stop the instance
+- type: mark-for-op # Mark the instance to be terminated in 7 days
+tag: custodian_cleanup
+msg: "This EC2 instance has had less than 2 percent CPU utilization for over 14 days: {op}@{action_date}"
+op: terminate
+days: 7

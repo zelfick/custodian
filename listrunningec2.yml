@@ -1,0 +1,6 @@
+
+policies:
+  - name: list-running-ec2
+    resource: aws.ec2
+    filters:
+      - "State.Name": running
