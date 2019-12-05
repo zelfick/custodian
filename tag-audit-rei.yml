@@ -1,0 +1,19 @@
+policies:
+  - name: tag-audit-rei
+    resource: aws.ec2
+    comment: |
+      Retrieve list of all resources that match the tags
+    filters:
+    - "State.Name": running   # I Validate if the instance is running
+    #validate if these tags are present
+    - "tag:Appid": present
+    - "tag:Environment": present
+    - "tag:BusinessUnit": present
+    - "tag:Costcenter": present
+    - "tag:Showbackio": present
+    
+    actions:
+    # Tag marker defined to check the tag compilance if not other rule while take care of completing the tgas
+      - type: tag
+        key: "Check"
+        value: "compilewithcheck"
