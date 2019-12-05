@@ -1,0 +1,15 @@
+  policies:
+  - name: test-mailer
+    resource: sqs
+    filters:
+      - "tag:MailerTest": absent
+    actions:
+      - type: notify
+        template: default
+        priority_header: '2'
+        subject: testing the c7n mailer
+        to:
+          - jorge.herran@endava.com
+        transport:
+          type: sqs
+          queue: https://sqs.us-east-1.amazonaws.com/643909698763/custodian-mailer-sqs

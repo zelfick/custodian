@@ -1,0 +1,4 @@
+queue_url: https://sqs.us-east-1.amazonaws.com/643909698763/custodian-mailer-sqs
+# Include a role which have permissions to access sqs
+role: arn:aws:iam::643909698763:user/Cloudcustodian
+from_address: jorge.herran@endava.com
